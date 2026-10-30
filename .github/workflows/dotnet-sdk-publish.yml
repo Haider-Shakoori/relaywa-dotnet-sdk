@@ -1,0 +1,66 @@
+name: Publish .NET SDK to NuGet
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Expected version in RelayWA.csproj (must be a new version)'
+        required: true
+        type: string
+      confirmation:
+        description: 'Type PUBLISH to confirm public NuGet publication'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nuget-release
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: ${{ inputs.confirmation == 'PUBLISH' }}
+    runs-on: ubuntu-latest
+    environment: nuget-release
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Verify version matches project
+        shell: bash
+        env:
+          EXPECTED_VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          [[ "$EXPECTED_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9.-]+)?$ ]] || { echo "Invalid version"; exit 1; }
+          ACTUAL_VERSION=$(sed -n 's/.*<Version>\(.*\)<\/Version>.*/\1/p' RelayWA/RelayWA.csproj | head -n 1)
+          test "$EXPECTED_VERSION" = "$ACTUAL_VERSION" || { echo "Version mismatch: expected $EXPECTED_VERSION, project $ACTUAL_VERSION"; exit 1; }
+          if [ "$EXPECTED_VERSION" = "0.1.0" ]; then
+            echo "0.1.0 is already published; bump version before release"
+            exit 1
+          fi
+      - name: Restore and build
+        run: |
+          dotnet restore RelayWA/RelayWA.csproj
+          dotnet build RelayWA/RelayWA.csproj --configuration Release --no-restore
+      - name: Pack
+        run: dotnet pack RelayWA/RelayWA.csproj --configuration Release --no-build --output ./artifacts
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: relaywa-nuget-release
+          path: artifacts/*.nupkg
+          if-no-files-found: error
+      - name: Publish to NuGet.org
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$NUGET_API_KEY" || { echo "Configure NUGET_API_KEY in the nuget-release environment"; exit 1; }
+          dotnet nuget push artifacts/*.nupkg --api-key "$NUGET_API_KEY" --source https://api.nuget.org/v3/index.json
