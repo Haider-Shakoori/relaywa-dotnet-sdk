@@ -4,8 +4,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <PackageId>RelayWA.Sdk</PackageId>
-    <Version>0.1.0</Version>
-    <Authors>RelayWA SDK contributors</Authors>
+    <Version>0.1.1</Version>
+    <Authors>RelayWA</Authors>
     <Description>Server-side RelayWA .NET SDK for WhatsApp messaging, session management, and webhooks.</Description>
     <PackageTags>relaywa;whatsapp;api;sdk;messaging;webhooks</PackageTags>
     <PackageProjectUrl>https://relaywa.com</PackageProjectUrl>
