@@ -21,6 +21,8 @@ jobs:
         run: dotnet restore RelayWA/RelayWA.csproj
       - name: Build
         run: dotnet build RelayWA/RelayWA.csproj --configuration Release --no-restore
+      - name: Offline SDK smoke test
+        run: dotnet run --project tests/RelayWA.Smoke/RelayWA.Smoke.csproj --configuration Release
       - name: Pack
         run: dotnet pack RelayWA/RelayWA.csproj --configuration Release --no-build --output ./artifacts
       - name: Upload NuGet package for review
