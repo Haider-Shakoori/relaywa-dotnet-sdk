@@ -14,6 +14,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write
 
 concurrency:
   group: nuget-release
@@ -56,11 +57,15 @@ jobs:
           name: relaywa-nuget-release
           path: artifacts/*.nupkg
           if-no-files-found: error
+      - name: NuGet login via GitHub OIDC
+        id: login
+        uses: NuGet/login@v1
+        with:
+          user: RelayWA
       - name: Publish to NuGet.org
         env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+          NUGET_API_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}
         shell: bash
         run: |
           set -euo pipefail
-          test -n "$NUGET_API_KEY" || { echo "Configure NUGET_API_KEY in the nuget-release environment"; exit 1; }
           dotnet nuget push artifacts/*.nupkg --api-key "$NUGET_API_KEY" --source https://api.nuget.org/v3/index.json
