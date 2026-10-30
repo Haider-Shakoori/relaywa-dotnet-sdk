@@ -9,7 +9,7 @@ var client = new RelayWAClient(http, "test-session-key", "https://example.test/a
 var result = await client.SessionsAsync();
 if (result.GetProperty("ok").GetBoolean() != true)
     throw new Exception("Unexpected response payload");
-if (handler.Requests != 1 || handler.Path != "/api/sessions")
+if (handler.Requests != 1 || handler.Path != "/api/whatsapp-sessions")
     throw new Exception($"Unexpected request: {handler.Requests}, {handler.Path}");
 if (handler.Authorization != "Bearer test-session-key")
     throw new Exception("Authorization header missing");
