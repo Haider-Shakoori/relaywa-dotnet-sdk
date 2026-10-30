@@ -2,7 +2,7 @@
 
 Official server-side C# client for the [RelayWA](https://relaywa.com) WhatsApp API.
 
-> **Release status:** Source package prepared for NuGet. `dotnet add package RelayWA.Sdk` is available only **after** the package is published to nuget.org.
+> **Release status:** `RelayWA.Sdk` v0.1.0 is published on NuGet.org. Version 0.1.1 is prepared for release; it becomes installable after publication.
 
 ## Requirements
 
@@ -10,12 +10,12 @@ Official server-side C# client for the [RelayWA](https://relaywa.com) WhatsApp A
 - A RelayWA account and a server-side session key
 - HTTPS connectivity to `https://relaywa.com/api`
 
-## Installation (after NuGet publication)
+## Installation
 
 ```bash
 dotnet new console -n RelayWADemo
 cd RelayWADemo
-dotnet add package RelayWA.Sdk --version 0.1.0
+dotnet add package RelayWA.Sdk --version 0.1.1
 ```
 
 To test the source package before publication, clone this repository and reference the project directly:
@@ -126,6 +126,10 @@ Methods are asynchronous and return `JsonElement`. HTTP errors raise `HttpReques
 | HTTP 401/403 | Confirm session key and account permissions. |
 | Timeout | Check connectivity and do not blindly retry sends. |
 | Missing class | Confirm `RelayWA.Sdk` package or project reference is installed. |
+
+## Smoke tests
+
+The GitHub CI runs a local, network-free smoke test using an in-memory HTTP handler. It checks session-list requests, authorization, and HTTPS validation without connecting to RelayWA production.
 
 ## Release process
 
