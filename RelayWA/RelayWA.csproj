@@ -1,1 +1,22 @@
-<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><TargetFramework>net8.0</TargetFramework><Nullable>enable</Nullable><ImplicitUsings>enable</ImplicitUsings><PackageId>RelayWA.Sdk</PackageId><Version>0.1.0</Version><Description>RelayWA server-side .NET SDK preview</Description><PackageLicenseFile>LICENSE</PackageLicenseFile></PropertyGroup><ItemGroup><None Include="LICENSE" Pack="true" PackagePath="" /></ItemGroup></Project>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <PackageId>RelayWA.Sdk</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>RelayWA SDK contributors</Authors>
+    <Description>Server-side RelayWA .NET SDK for WhatsApp messaging, session management, and webhooks.</Description>
+    <PackageTags>relaywa;whatsapp;api;sdk;messaging;webhooks</PackageTags>
+    <PackageProjectUrl>https://relaywa.com</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Haider-Shakoori/relaywa-dotnet-sdk</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="LICENSE" Pack="true" PackagePath="" />
+    <None Include="../README.md" Pack="true" PackagePath="" />
+  </ItemGroup>
+</Project>
