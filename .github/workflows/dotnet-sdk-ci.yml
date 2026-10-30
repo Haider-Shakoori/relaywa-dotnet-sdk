@@ -1,0 +1,31 @@
+name: .NET SDK validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-pack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Restore
+        run: dotnet restore RelayWA/RelayWA.csproj
+      - name: Build
+        run: dotnet build RelayWA/RelayWA.csproj --configuration Release --no-restore
+      - name: Pack
+        run: dotnet pack RelayWA/RelayWA.csproj --configuration Release --no-build --output ./artifacts
+      - name: Upload NuGet package for review
+        uses: actions/upload-artifact@v4
+        with:
+          name: relaywa-sdk-nupkg
+          path: artifacts/*.nupkg
+          if-no-files-found: error
